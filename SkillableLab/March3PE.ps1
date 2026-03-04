@@ -28,6 +28,6 @@ Get-ADUser -Filter "City -EQ 'London'" -SearchBase $SalesOUPath |
 $Users = Get-ADUser -SearchBase $LondonOUPath -Filter *
 
 ForEach ($user in $users) {
-        Add-ADGroupMember -Identity $GSGroupName -Members $user
+        Add-ADGroupMember -Identity $GSGroupName -Members $Users
         Write-Host "Users sucessfully moved."
 }
