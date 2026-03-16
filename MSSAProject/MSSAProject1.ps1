@@ -36,3 +36,35 @@ foreach ($Group in $Groups) {
         }
 }
 
+$Users = @(
+    @{ Name = "Cole Quinn"; Sam = "cquinn"; OU = "IT"}
+    @{ Name = "Christian McGhee"; Sam = "cmcghee"; OU = "IT"}
+    @{ Name = "Douglas Binchus"; Sam = "dbinchus"; OU = "IT"}
+    @{ Name = "Joshua Frometa"; Sam = "jfrometa"; OU = "IT"}
+
+    @{ Name = "Brandon Perez"; Sam = "bperez"; OU = "HumanResources"}
+    @{ Name = "Herby Milfort"; Sam = "hmilfort"; OU = "HumanResources"}
+    @{ Name = "Camilo Alvarez"; Sam = "calvarez"; OU = "HumanResources"}
+    @{ Name = "David Xiong"; Sam = "dxiong"; OU = "HumanResources"}
+
+    @{ Name = "Edjeame Toyi"; Sam = "etoyi"; OU = "Finance"}
+    @{ Name = "Hamdaani Ousmane"; Sam = "housmane"; OU = "Finance"}
+    @{ Name = "Jayar Loiselle"; Sam = "jloiselle"; OU = "Finance"}
+    @{ Name = "Angela Kelly"; Sam = "akelly"; OU = "Finance"}
+
+    @{ Name = "Jonathan Arroyo"; Sam = "jarroyo"; OU = "Sales"}
+    @{ Name = "Scott Harris"; Sam = "sharris"; OU = "Sales"}
+    @{ Name = "Brittany Zurilgen"; Sam = "bzurilgen"; OU = "Sales"}
+    @{ Name = "Feras Bouti"; Sam = "fbouti"; OU = "Sales"}
+
+    @{ Name = "John Smith"; Sam = "jsmith"; OU = "Training"}
+    @{ Name = "Emily Clark"; Sam = "eclark"; OU = "Training"}
+    @{ Name = "Sarah Chase"; Sam = "schase"; OU = "Training"}
+    @{ Name = "Michael Robinson"; Sam = "mrobinson"; OU = "Training"}
+)
+
+foreach ($User in $Users) {
+    $UserPath = "OU=$($User.OU),$DomainDN"
+    $Password = ConvertTo-SecureString "Pa55w.rd" -AsPlainText -Force
+    New-ADUser -Name $($User.Name) -SamAccountName $($Sam.Name) -UserPrincipalName
+}
