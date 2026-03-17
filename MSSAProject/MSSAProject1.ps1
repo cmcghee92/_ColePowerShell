@@ -6,6 +6,7 @@ $OUs = @(
     "Finance"
     "Sales"
     "Training"
+    "DisabledUsers"
 )
 foreach ($OU in $OUs) {
     $ExistingOU =  Get-ADOrganizationalUnit -Filter "Name -eq '$OU'"
@@ -104,3 +105,34 @@ ForEach ($User in $DisabledUsers) {
         Write-Host "Failed to Enable User: $($User.SamAccountName)"
     }
 }
+#Disable user accounts that have that have not been used to logon with in 30 or more days
+$Cutoff = (Get-Date).AddDays(-30)
+$CutoffFileTime = $Cutoff.ToFileTime()
+$InactiveUsers = Get-ADUser -Filter "LastLogonTimeStamp -lt $CutoffFileTime" -Properties LastLogonTimeStamp
+foreach ($User in $InactiveUsers) {
+        try {
+            Disable-ADAccount -Identity $User.SamAccountName
+            Write-Host "Disabled user: $($User.SamAccountName)"
+        }
+        catch {
+        Write-Host "Failed to disable user: $($User.SamAccountName)" -ForegroundColor Red
+         }
+}
+#Disabled User
+Disable-ADAccount -Identity "cquinn"
+#Move Disabled Users to the DisabledUsers OU
+$TargetDisabledOU = "OU=DisabledUsers,DC=adatum,DC=com"
+$DisabledUsers2 = Get-ADUser -Filter 'Enabled -eq $false' -Properties DistinguishedName
+foreach ($User in $DisabledUsers2) {
+    try {
+        Move-ADObject -Identity $User.DistinguishedName -TargetPath $TargetDisabledOU
+        Write-Host "Moved user: $($User.SamAccountName) to DisabledUsers OU"
+    }
+    catch {
+        Write-Host "Failed to move user: $($User.SamAccountName)" -ForegroundColor Red
+    }
+}
+#Create list of computers with a particular operating system installed
+$OS = "Windows Server 2022*"
+$Windows2022Computers = Get-ADComputer -Filter "OperatingSystem -like '$OS'" -Properties OperatingSystem
+$Windows2022Computers | Select-Object Name,OperatingSystem
