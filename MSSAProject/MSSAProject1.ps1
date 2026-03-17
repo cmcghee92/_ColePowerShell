@@ -10,7 +10,7 @@ $OUs = @(
 )
 foreach ($OU in $OUs) {
     $ExistingOU =  Get-ADOrganizationalUnit -Filter "Name -eq '$OU'"
-        if ($ExistingOU -eq $null) {
+        if ($null -eq $ExistingOU) {
             New-ADOrganizationalUnit -Name $OU -Path $DomainDN
             Write-Host "New OU created with the name: $OU" -ForegroundColor Green
         } else {
@@ -29,7 +29,7 @@ $Groups = @(
 foreach ($Group in $Groups) {
     $ExistingGroup = Get-ADGroup -Filter "Name -eq '$($Group.Name)'"
     $GroupPath = "OU=$($Group.OU),$DomainDN"
-        if ($ExistingGroup -eq $null) {
+        if ($null -eq $ExistingGroup) {
             New-ADGroup -Name $($Group.Name) -GroupScope Global -GroupCategory Security -Path $GroupPath
             Write-Host "New Global Security Group has been created with the name: $($Group.Name)" -ForegroundColor Green
         } else {
@@ -169,3 +169,5 @@ $Computer = Read-Host "Enter the Computer Name to Restart"
     catch {
         Write-Host "Failed to Restart Computer: $Computer" -ForegroundColor Red       
 }
+
+
