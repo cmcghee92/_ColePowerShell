@@ -159,3 +159,13 @@ foreach ($computer in $computers) {
         Write-Host "Unable to Restart Computer: $Computer" -ForegroundColor Red
     }
 }
+
+#Restart a Computer with Read-Host
+$Computer = Read-Host "Enter the Computer Name to Restart"
+    try {
+        Restart-Computer -ComputerName $Computer -Force -ErrorAction Stop
+        Write-Host "Successfully Restarted Computer: $Computer" -ForegroundColor Green
+    }
+    catch {
+        Write-Host "Failed to Restart Computer: $Computer" -ForegroundColor Red       
+}
