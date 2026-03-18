@@ -6,6 +6,7 @@ Invoke-Command -ComputerName $ComputerName -ScriptBlock {
         Write-Host "Name: $($User.name)" -ForegroundColor Green
         Write-Host "Enabled: $($User.enabled)" -ForegroundColor Cyan
         Write-Host "Last Logon: $($User.lastlogon)" -ForegroundColor Magenta
+        Write-Host "====================================================" -ForegroundColor White
     }
     $Groups = Get-LocalGroup
     foreach ($Group in $Groups) {
@@ -21,10 +22,11 @@ Invoke-Command -ComputerName $ComputerName -ScriptBlock {
             $Flag = "------"
         }
         Write-Host "Group Name: $($Group.name)" -ForegroundColor Green
-        Write-Host "Group Description: $($Group.description)" -ForegroundColor DarkYellow
+        Write-Host "Group Description: $($Group.description)" -ForegroundColor Cyan
         Write-Host "Group SID: $($Group.SID)" -ForegroundColor Magenta
-        Write-Host "Members: $MemberCount" -ForegroundColor Cyan
+        Write-Host "Members: $MemberCount" -ForegroundColor DarkYellow
         Write-Host "$Flag" -ForegroundColor Red
+        Write-Host "====================================================" -ForegroundColor White
     }
 }
 #Allows an Administrator to remotely access the local users and groups on a machine.
@@ -32,4 +34,5 @@ Invoke-Command -ComputerName $ComputerName -ScriptBlock {
 #to verify which accounts are active, disabled, etc. From there, the Administrator
 #can perform other actions to delete old/unused accounts, enable/disable accounts,
 #or other actions. From a group perspective, the Administrator can identify unknown
-#or unused groups.
+#or unused groups. He can also check groups containing key words: Admin (privileges)
+#backup (file access) or remote (remote access).
